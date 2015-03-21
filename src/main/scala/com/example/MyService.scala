@@ -4,6 +4,10 @@ import akka.actor.Actor
 import spray.routing._
 import spray.http._
 import MediaTypes._
+import spray.json.DefaultJsonProtocol._
+import spray.json.DefaultJsonProtocol
+
+import scala.collection.mutable
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
@@ -19,22 +23,36 @@ class MyServiceActor extends Actor with MyService {
   def receive = runRoute(myRoute)
 }
 
+case class Point(x: Int, y: Int)
+
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
 
-  val myRoute =
+  val myRoute = {
     path("") {
-      get {
-        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete {
-            <html>
-              <body>
-                <h1>Say hello to <i>spray-routing</i> on <i>Jetty</i>!</h1>
-              </body>
-            </html>
-          }
+      getFromResource("web/index.html")
+    } ~ {
+      getFromResourceDirectory("web")
+    } ~ path("azaza") {
+      respondWithMediaType(`application/json`) {
+        complete {
+          val list = mutable.MutableList[Point]()
+          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
+          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
+          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
+          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
+          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
+          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
+          var s = "["
+          list.foreach {point => s=s+jsonFormat2(Point).write(point).toString()+","}
+          if (s.endsWith(",")) s = s.substring(0, s.length-1)
+          s=s+"]"
+          s
         }
       }
     }
+  }
+
+
 }
