@@ -4,8 +4,9 @@ import akka.actor.Actor
 import spray.routing._
 import spray.http._
 import MediaTypes._
-import spray.json.DefaultJsonProtocol._
-import spray.json.DefaultJsonProtocol
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 import scala.collection.mutable
 
@@ -23,8 +24,7 @@ class MyServiceActor extends Actor with MyService {
   def receive = runRoute(myRoute)
 }
 
-case class Point(x: Int, y: Int)
-
+class Point(val x: Int, val y: Int)
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
@@ -44,11 +44,9 @@ trait MyService extends HttpService {
           list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
           list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
           list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
-          var s = "["
-          list.foreach {point => s=s+jsonFormat2(Point).write(point).toString()+","}
-          if (s.endsWith(",")) s = s.substring(0, s.length-1)
-          s=s+"]"
-          s
+          val mapper = new ObjectMapper()
+          mapper.registerModule(DefaultScalaModule)
+          mapper.writeValueAsString(list)
         }
       }
     }
