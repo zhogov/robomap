@@ -8,7 +8,8 @@
 void setup()
 {
   Serial.begin(57600);
-  
+
+  // init the transceiver
   Mirf.csnPin=4;
   Mirf.cePin=5;
   Mirf.spi = &MirfHardwareSpi;
