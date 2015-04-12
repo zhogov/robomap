@@ -30,7 +30,7 @@ void runForward()
     digitalWrite(DIR_LEFT, HIGH);
     digitalWrite(DIR_RIGHT, HIGH);
     
-    delay(3000);    
+    delay(1500);    
     analogWrite(SPEED_LEFT, 0);
     analogWrite(SPEED_RIGHT, 0);
 }
@@ -45,7 +45,7 @@ void runBackward()
     digitalWrite(DIR_LEFT, LOW);
     digitalWrite(DIR_RIGHT, LOW);
     
-    delay(3000);    
+    delay(1500);    
     analogWrite(SPEED_LEFT, 0);
     analogWrite(SPEED_RIGHT, 0);
 }
@@ -60,7 +60,7 @@ void steerRight()
     digitalWrite(DIR_LEFT, HIGH);
     digitalWrite(DIR_RIGHT, HIGH);
     
-    delay(1000);    
+    delay(500);    
     analogWrite(SPEED_LEFT, 0);
     analogWrite(SPEED_RIGHT, 0);
 }
@@ -73,7 +73,7 @@ void steerLeft()
     digitalWrite(DIR_LEFT, HIGH);
     digitalWrite(DIR_RIGHT, HIGH);
     
-    delay(1000);    
+    delay(500);    
     analogWrite(SPEED_LEFT, 0);
     analogWrite(SPEED_RIGHT, 0);
 }
