@@ -301,3 +301,4 @@ void Nrf24l::powerDown(){
 	ceLow();
 	configRegister(CONFIG, mirf_CONFIG );
 }
+

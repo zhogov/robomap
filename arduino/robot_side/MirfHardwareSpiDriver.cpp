@@ -13,3 +13,4 @@ void MirfHardwareSpiDriver::end(){
 }
 
 MirfHardwareSpiDriver MirfHardwareSpi;
+

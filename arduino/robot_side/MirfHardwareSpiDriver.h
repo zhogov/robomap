@@ -16,3 +16,4 @@ class MirfHardwareSpiDriver : public MirfSpiDriver {
 extern MirfHardwareSpiDriver MirfHardwareSpi;
 
 #endif
+

@@ -80,14 +80,16 @@ void setup()
   Serial.begin(57600);
 
   // Настраивает выводы платы 4,5,6,7 на вывод сигналов
-  for(int i = 4; i <= 7; i++)
-      pinMode(i, OUTPUT);
+
 
   // init the transceiver
-  Mirf.csnPin=10;
-  Mirf.cePin=9;
+  Mirf.csnPin=3;
+  Mirf.cePin=2;
   Mirf.spi = &MirfHardwareSpi;
   Mirf.init();
+  
+  // name the receiving channel - must match tranmitter setting!
+  Mirf.setRADDR((byte *)"TX_02");
   
   // just a single byte is transmitted
   Mirf.payload = 1;
@@ -110,12 +112,7 @@ void setup()
 void loop() 
 {
   Serial.println("ROBOT");  
-  delay(400);
-  // transmit a separator
-  //transmit("A");
- 
-  // ... just take your time
-  delay(400);
+  delay(500);
 
   if( Mirf.dataReady() )
     {
@@ -123,7 +120,7 @@ void loop()
        // well, get it
        Mirf.getData(&c);
 
-        Serial.print(c);
+        Serial.println(c);
 
        int incoming = c;
        if (incoming == 'f') {
@@ -151,4 +148,5 @@ void loop()
 
     }
 }
+
 

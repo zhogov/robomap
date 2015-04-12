@@ -10,8 +10,8 @@ void setup()
   Serial.begin(57600);
 
   // init the transceiver
-  Mirf.csnPin=10;
-  Mirf.cePin=9;
+  Mirf.csnPin=3;
+  Mirf.cePin=2;
   Mirf.spi = &MirfHardwareSpi;
   Mirf.init();
   
@@ -30,6 +30,10 @@ void setup()
   
   // Set 1MHz data rate - this increases the range slightly
   Mirf.configRegister(RF_SETUP,0x06);
+  
+  // Set address - this one must match the 
+  // address the receiver is using!
+  Mirf.setTADDR((byte *)"TX_02");
 }
 
 // sends a string via the nRF24L01
@@ -45,15 +49,32 @@ void transmit(const char *string)
   }
 }
 
+int i = 0;
 void loop()
 {
-
+  
   Serial.println("PC");  
-  delay(400);
   // transmit a separator
+  delay(5000);
   transmit("f");
- 
+  delay(1000);
+  transmit("l");
+  delay(1000);
+  transmit("r");
+  delay(1000);
+  transmit("b");
+  delay(1000);
+  transmit("s");
+  while(true){
+ if( Mirf.dataReady() )
+    {
+       byte c;
+       // well, get it
+       Mirf.getData(&c);
+       Serial.print((char)c);
+       if (((char)c)==']') break;
+    }
+  }
   // ... just take your time
-  delay(400);
 }
 
