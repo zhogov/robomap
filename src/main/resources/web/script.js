@@ -3,7 +3,7 @@ function draw(arrayOfRanges) {
     // Set up!
     var a_canvas = document.getElementById("a");
     var context = a_canvas.getContext("2d");
-    context.clearRect ( 0 , 0 , canvas.width, canvas.height );
+    context.clearRect ( 0 , 0 , a_canvas.width, a_canvas.height );
 
     var x0=300
     var y0=300

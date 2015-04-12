@@ -53,28 +53,32 @@ int i = 0;
 void loop()
 {
   
-  Serial.println("PC");  
-  // transmit a separator
-  delay(5000);
-  transmit("f");
-  delay(1000);
-  transmit("l");
-  delay(1000);
-  transmit("r");
-  delay(1000);
-  transmit("b");
-  delay(1000);
-  transmit("s");
-  while(true){
- if( Mirf.dataReady() )
-    {
-       byte c;
-       // well, get it
-       Mirf.getData(&c);
-       Serial.print((char)c);
-       if (((char)c)==']') break;
-    }
-  }
+if ( Serial.available()>0 ) {
+  
+  char command = (char) Serial.read();
+  Serial.write(10);
+  if ( command == 's' ) {
+    //Serial.print("sent s");
+    transmit("s");
+    while(true){
+     if( Mirf.dataReady() )
+        {
+           byte c;
+           // well, get it
+           Mirf.getData(&c);
+           Serial.print((char)c);
+           if (((char)c)==']') break;
+        }
+      }    
+  } else {    
+    //Serial.print("sent ");
+    //Serial.print(command);
+    byte c = command;
+    Mirf.send(&c);
+    while( Mirf.isSending() ) ;
+  } 
+  
   // ... just take your time
+}
 }
 

@@ -29,6 +29,10 @@ void runForward()
     // вперёд, если LOW - назад.
     digitalWrite(DIR_LEFT, HIGH);
     digitalWrite(DIR_RIGHT, HIGH);
+    
+    delay(3000);    
+    analogWrite(SPEED_LEFT, 0);
+    analogWrite(SPEED_RIGHT, 0);
 }
 
 void runBackward()
@@ -40,6 +44,10 @@ void runBackward()
     // вперёд, если LOW - назад.
     digitalWrite(DIR_LEFT, LOW);
     digitalWrite(DIR_RIGHT, LOW);
+    
+    delay(3000);    
+    analogWrite(SPEED_LEFT, 0);
+    analogWrite(SPEED_RIGHT, 0);
 }
 
 void steerRight()
@@ -51,6 +59,10 @@ void steerRight()
 
     digitalWrite(DIR_LEFT, HIGH);
     digitalWrite(DIR_RIGHT, HIGH);
+    
+    delay(1000);    
+    analogWrite(SPEED_LEFT, 0);
+    analogWrite(SPEED_RIGHT, 0);
 }
 
 void steerLeft()
@@ -60,6 +72,10 @@ void steerLeft()
 
     digitalWrite(DIR_LEFT, HIGH);
     digitalWrite(DIR_RIGHT, HIGH);
+    
+    delay(1000);    
+    analogWrite(SPEED_LEFT, 0);
+    analogWrite(SPEED_RIGHT, 0);
 }
 
 // sends a string via the nRF24L01
@@ -111,9 +127,6 @@ void setup()
 
 void loop() 
 {
-  Serial.println("ROBOT");  
-  delay(500);
-
   if( Mirf.dataReady() )
     {
        byte c;

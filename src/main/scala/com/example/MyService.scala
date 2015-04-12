@@ -69,7 +69,7 @@ class ComActor extends Actor with ActorLogging {
           if (x.toChar.equals(']')) {
             // process buffer
             processPoints(buffer)
-            println(buffer)
+            println("Got data: " + buffer)
             buffer = ""
           }
         }
@@ -123,6 +123,7 @@ trait MyService extends HttpService {
     } ~ path("forward") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          println("forward")
           Storage.operator ! Write(ByteString('f'.toByte))
           ""
         }
@@ -130,6 +131,7 @@ trait MyService extends HttpService {
     } ~ path("back") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          println("back")
           Storage.operator ! Write(ByteString('b'.toByte))
           ""
         }
@@ -137,6 +139,7 @@ trait MyService extends HttpService {
     } ~ path("left") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          println("left")
           Storage.operator ! Write(ByteString('l'.toByte))
           ""
         }
@@ -144,6 +147,7 @@ trait MyService extends HttpService {
     } ~ path("right") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          println("right")
           Storage.operator ! Write(ByteString('r'.toByte))
           ""
         }
@@ -151,6 +155,7 @@ trait MyService extends HttpService {
     } ~ path("scan") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          println("scan")
           Storage.operator ! Write(ByteString('s'.toByte))
           ""
         }
