@@ -19,6 +19,7 @@ import scala.collection.mutable
 
 object Storage {
   var array = List[Int]()
+  var operator :ActorRef = null
 }
 
 class ComActor extends Actor with ActorLogging {
@@ -42,9 +43,9 @@ class ComActor extends Actor with ActorLogging {
     }
     case Opened(port) => {
       log.info(s"Port ${port} is now open.")
-      val operator = sender
-      context become opened(operator)
-      context watch operator
+      Storage.operator = sender
+      context become opened(Storage.operator)
+      context watch Storage.operator
     }
   }
 
@@ -59,16 +60,18 @@ class ComActor extends Actor with ActorLogging {
   def opened(operator: ActorRef): Receive = {
     case Received(data) => {
       data.foreach(x => {
-        buffer = buffer + x.toChar
-        if (x==0) {
-          // got some nulls
+        if (buffer.isEmpty && !x.toChar.equals('[')) {
+          // got some crap
+          println(x)
           buffer = ""
-        }
-        if (x.toChar.equals(']')) {
-          // process buffer
-          processPoints (buffer)
-          println (buffer)
-          buffer = ""
+        } else {
+          buffer = buffer + x.toChar
+          if (x.toChar.equals(']')) {
+            // process buffer
+            processPoints(buffer)
+            println(buffer)
+            buffer = ""
+          }
         }
       })
       //log.info(s"Received data: ${data}")
@@ -120,30 +123,35 @@ trait MyService extends HttpService {
     } ~ path("forward") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          Storage.operator ! Write(ByteString('f'.toByte))
           ""
         }
       }
     } ~ path("back") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          Storage.operator ! Write(ByteString('b'.toByte))
           ""
         }
       }
     } ~ path("left") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          Storage.operator ! Write(ByteString('l'.toByte))
           ""
         }
       }
     } ~ path("right") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          Storage.operator ! Write(ByteString('r'.toByte))
           ""
         }
       }
     } ~ path("scan") {
       respondWithStatus(StatusCodes.OK) {
         complete {
+          Storage.operator ! Write(ByteString('s'.toByte))
           ""
         }
       }
