@@ -17,9 +17,13 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 import scala.collection.mutable
 
+object Storage {
+  var array = List[Int]()
+}
+
 class ComActor extends Actor with ActorLogging {
   {
-    val port = "/dev/ttyUSB1"
+    val port = "/dev/ttyUSB0"
     try {
       ("kdesudo chmod 777 " + port).!!
     }
@@ -44,9 +48,30 @@ class ComActor extends Actor with ActorLogging {
     }
   }
 
+  var buffer = ""
+
+  def processPoints(bufferString : String): Unit = {
+    val mapper = new ObjectMapper()
+    mapper.registerModule(DefaultScalaModule)
+    Storage.array = mapper.readValue(bufferString, classOf[List[Int]])
+  }
+
   def opened(operator: ActorRef): Receive = {
     case Received(data) => {
-      log.info(s"Received data: ${data}")
+      data.foreach(x => {
+        buffer = buffer + x.toChar
+        if (x==0) {
+          // got some nulls
+          buffer = ""
+        }
+        if (x.toChar.equals(']')) {
+          // process buffer
+          processPoints (buffer)
+          println (buffer)
+          buffer = ""
+        }
+      })
+      //log.info(s"Received data: ${data}")
     }
     case Closed => {
       log.info("Operator closed normally, exiting terminal.")
@@ -87,16 +112,9 @@ trait MyService extends HttpService {
     } ~ path("points") {
       respondWithMediaType(`application/json`) {
         complete {
-          val list = mutable.MutableList[Point]()
-          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
-          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
-          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
-          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
-          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
-          list+=new Point(scala.util.Random.nextInt(700), scala.util.Random.nextInt(700))
           val mapper = new ObjectMapper()
           mapper.registerModule(DefaultScalaModule)
-          mapper.writeValueAsString(list)
+          mapper.writeValueAsString(Storage.array)
         }
       }
     } ~ path("forward") {

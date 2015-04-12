@@ -1,14 +1,22 @@
 
-function draw(arrayOfPoints) {
+function draw(arrayOfRanges) {
     // Set up!
     var a_canvas = document.getElementById("a");
     var context = a_canvas.getContext("2d");
+    context.clearRect ( 0 , 0 , canvas.width, canvas.height );
 
-    var arrayLength = arrayOfPoints.length;
+    var x0=300
+    var y0=300
+    context.fillRect(x0, y0, 4, 4);
+
+    var arrayLength = arrayOfRanges.length;
     for (var i = 0; i < arrayLength; i++) {
-        var point = arrayOfPoints[i];
+        var range = arrayOfRanges[i];
+
+        var angle = 360/arrayLength*i
         context.fillStyle = "#F00";
-        context.fillRect(point.x, point.y, 4, 4);
+        context.fillRect(x0 + range * Math.cos(Math.PI * angle / 180.0),
+                         y0 + range * Math.sin(Math.PI * angle / 180.0), 4, 4);
     }
 
 // Draw the face
@@ -43,14 +51,6 @@ function draw(arrayOfPoints) {
     context.font = "30px Garamond";
     context.fillText("Hello, World!",15,175);
 }
-
-var arr = [
-    {"x":50, "y":50},
-    {"x":150, "y":50},
-    {"x":250, "y":150},
-    {"x":350, "y":250},
-    {"x":450, "y":50}
-];
 
 function load() {
     $.ajax({
