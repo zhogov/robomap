@@ -3,12 +3,24 @@
 <head>
     <title>Smiley Face</title>
     <link rel='stylesheet' type='text/css' href='stylesheet.css'/>
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.11.2.js'></script>
+    <script type='text/javascript' src='script.js'></script>
 </head>
 <body>
+<button>_</button>
+<button onclick="$.get('forward')">F</button>
+<button>_</button>
+<br>
+<button onclick="$.get('left')">L</button>
+<button onclick="$.get('scan')">S</button>
+<button onclick="$.get('right')">R</button>
+<br>
+<button>_</button>
+<button onclick="$.get('back')">B</button>
+<button>_</button>
+<br>
 <canvas id="a" width="800" height="800">
     This text is displayed if your browser does not support HTML5 Canvas.
 </canvas>
-<script type='text/javascript' src='http://code.jquery.com/jquery-1.11.2.js'></script>
-<script type='text/javascript' src='script.js'></script>
 </body>
 </html>

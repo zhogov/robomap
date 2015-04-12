@@ -55,7 +55,7 @@ var arr = [
 function load() {
     $.ajax({
         type:'get',
-        url: "/azaza",
+        url: "points",
         success: function (arr) {
             draw(arr)
         }
