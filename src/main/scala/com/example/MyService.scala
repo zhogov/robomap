@@ -32,7 +32,7 @@ class ComActor extends Actor with ActorLogging {
       case e:RuntimeException => {} // No code to execute. Ignore error.
     }
 
-    IO(Serial)(Boot.system) ! Serial.Open(port, SerialSettings(115200, 8, false, Parity(0)))
+    IO(Serial)(Boot.system) ! Serial.Open(port, SerialSettings(57600, 8, false, Parity(0)))
     SerialConnection.debug(true)
   }
 
@@ -62,7 +62,7 @@ class ComActor extends Actor with ActorLogging {
       data.foreach(x => {
         if (buffer.isEmpty && !x.toChar.equals('[')) {
           // got some crap
-          println(x)
+          println(""+x+" : "+x.toChar)
           buffer = ""
         } else {
           buffer = buffer + x.toChar
